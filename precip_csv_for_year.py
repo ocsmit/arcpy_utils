@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import arcpy
 
-def csv_to_xy_filter(in_csv, out_csv, out_shp):
+def filter_precip_to_shp(in_csv, out_csv, out_shp):
 
 	data = pd.read_csv(in_csv, skiprows=10)
 
