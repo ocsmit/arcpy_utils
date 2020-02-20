@@ -1,8 +1,8 @@
 #------------------------------------------------------------------------------
 # Name: precip_csv_for_year.py
 # Author: Owen Smith, Zach Pilgrim, University of North Georgia IESA
-# Purpose: Filter precipitation csv for efficient data processing in Operation 
-#          Odocoileus
+# Purpose: Filter precipitation csv and create point shapefile for efficient 
+# 	   data processing in Operation Odocoileus.
 #------------------------------------------------------------------------------
 
 import os
