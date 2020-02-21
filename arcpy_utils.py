@@ -69,10 +69,14 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 		os.mkdir(out_dir)
 	year_csv = '%s_%d%s' % (csv_name, year, '.csv')
 	out_csv = '%s/%s' % (out_dir, year_csv)
+	if os.path.exists(out_csv):
+		print('Output CSV file exists already.')
 	if not os.path.exists(out_csv):
 		data_1980.to_csv(out_csv, index=None, header=True)
 	year_shp = '%s_%d%s' % (shp_name, year, '.shp')
 	out_shp = '%s/%s' % (out_dir, year_shp)
+	if os.path.exists(out_shp):
+		print('Output shapefile exists already')
 	if not os.path.exists(out_shp):
 		arcpy.management.XYTableToPoint(out_csv, out_shp, 'Longitude',
 										'Latitude')
