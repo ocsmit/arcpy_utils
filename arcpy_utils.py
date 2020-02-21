@@ -39,7 +39,7 @@ def add_naip(gt_point, naipqq_layer, naip_dir):
 
 
 def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
-								shp_name):
+							  shp_name):
 	"""
 	This function was created to aid with processing of yearly weather data .CSV
 	files from prism.oregon.edu and create point shapefiles with the desired
@@ -57,7 +57,7 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 	"""
 
 	data = pd.read_csv(in_csv, skiprows=10)
-	fields = ['Date', 'Latitude', 'Longitude']
+	fields = ['Name', 'Date', 'Latitude', 'Longitude']
 	for i in columns:
 		fields.append(i)
 
@@ -67,10 +67,13 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 
 	if not os.path.exists(out_dir):
 		os.mkdir(out_dir)
-
-	if not os.path.exists(os.path.join(out_dir, csv_name)):
+	year_csv = '%s_%d%s' % (csv_name, year, '.csv')
+	out_csv = '%s/%s' % (out_dir, year_csv)
+	if not os.path.exists(out_csv):
 		data_1980.to_csv(out_csv, index=None, header=True)
-	if not os.path.exists(os.path.join(out_dir, shp_name)):
+	year_shp = '%s_%d%s' % (shp_name, year, '.shp')
+	out_shp = '%s/%s' % (out_dir, year_shp)
+	if not os.path.exists(out_shp):
 		arcpy.management.XYTableToPoint(out_csv, out_shp, 'Longitude',
 										'Latitude')
 		delete_fields = ['Latitude', 'Longitude']
