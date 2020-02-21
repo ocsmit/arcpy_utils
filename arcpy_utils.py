@@ -3,6 +3,7 @@
 # Author: Owen Smith, University of North Georgia IESA
 # Purpose: Python module containing miscellaneous arcpy functions created for
 # 		   various different uses.
+# License: GNU v3.0 
 # ------------------------------------------------------------------------------
 
 import os
