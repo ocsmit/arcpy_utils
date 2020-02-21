@@ -17,10 +17,10 @@ def add_naip(gt_point, naipqq_layer, naip_dir):
 	memory of the arcgis pro project.
 	---
 	Parameters:
-	gt_point: Name of ground truthing point shapefile to add NAIP based
-	off of
-	naipqq_layer: NAIP Quarter Quad shapefile.
-	naip_dir: Directory in which all NAIP imagery is stored.
+	gt_point :: str: Name of ground truthing point shapefile to add NAIP based
+					 off of
+	naipqq_layer :: str: NAIP Quarter Quad shapefile.
+	naip_dir :: str: Directory in which all NAIP imagery is stored.
 	"""
 
 	arcpy.SelectLayerByAttribute_management(naipqq_layer, 'CLEAR_SELECTION')
@@ -39,7 +39,7 @@ def add_naip(gt_point, naipqq_layer, naip_dir):
 
 
 def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
-							  shp_name):
+								shp_name):
 	"""
 	This function was created to aid with processing of yearly weather data .CSV
 	files from prism.oregon.edu and create point shapefiles with the desired
@@ -48,12 +48,13 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 	Project: Operation Odocoileus - Zach Pilgrim
 	---
 	Parameters:
-	in_csv: File path of input .CSV file
-	year: Year being selected
-	columns: List of weather columns to use in final shapefile/.CSV
-	out_dir: Directory where out puts will be saved
-	csv_name: Name of final output .CSV
-	shp_name: Name of final output shapefile
+	in_csv :: str: File path of input .CSV file
+	year :: int: Year being selected
+	columns :: list: List of weather columns to use in final shapefile/.CSV
+	out_dir :: str: Directory where out puts will be saved
+	csv_name :: str: Name of final output .CSV, does not need file extension
+	shp_name :: str: Name of final output shapefile, does not need
+					 file extension
 	"""
 
 	data = pd.read_csv(in_csv, skiprows=10)
