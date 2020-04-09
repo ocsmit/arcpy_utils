@@ -86,3 +86,12 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 		arcpy.DeleteField_management(out_shp, delete_fields)
 
 	print('Complete.')
+
+
+def shp_extent(shp):
+        for row in arcpy.da.SearchCursor(shp, ['SHAPE@']):
+                extent = row[0].extent
+                print('XMin: {}, YMin: {}'.format(extent.XMin, extent.YMin))
+                print('XMax: {}, YMax: {}'.format(extent.XMax, extent.YMax))
+
+                return extent.XMin, extent.YMin, extent.XMax, extent.YMax
