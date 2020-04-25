@@ -40,7 +40,7 @@ def add_naip(gt_point, naipqq_layer, naip_dir):
 
 
 def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
-								shp_name):
+							  shp_name):
 	"""
 	This function was created to aid with processing of yearly weather data .CSV
 	files from prism.oregon.edu and create point shapefiles with the desired
@@ -89,9 +89,39 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 
 
 def shp_extent(shp):
-        for row in arcpy.da.SearchCursor(shp, ['SHAPE@']):
-                extent = row[0].extent
-                print('XMin: {}, YMin: {}'.format(extent.XMin, extent.YMin))
-                print('XMax: {}, YMax: {}'.format(extent.XMax, extent.YMax))
+	for row in arcpy.da.SearchCursor(shp, ['SHAPE@']):
+		extent = row[0].extent
+		print('XMin: {}, YMin: {}'.format(extent.XMin, extent.YMin))
+		print('XMax: {}, YMax: {}'.format(extent.XMax, extent.YMax))
 
-                return extent.XMin, extent.YMin, extent.XMax, extent.YMax
+		return extent.XMin, extent.YMin, extent.XMax, extent.YMax
+
+
+def query_GLUT(glut_tif, out_raster, value_list):
+	"""
+	This function is created to query GLUT land cover rasters and create a
+	new tif file of the selected values.
+	---
+	Parameters:
+		glut_tif :: str : input GLUT raster
+		out_raster :: str : output raster of selected values
+		value_list :: list of int : values to query
+
+	"""
+
+	raster = arcpy.Raster(glut_tif)
+
+	if len(value_list) == 1:
+		clause = ["VALUE = %d" % value_list[i] for i in
+				  range(len(value_list))]
+		query_string = " ".join(clause)
+		extract = arcpy.sa.ExtractByAttributes(glut_tif, query_string)
+
+	if len(value_list) > 1:
+		clause = ["VALUE = %d OR" % value_list[i] for i in
+				  range(len(value_list))]
+		query = " ".join(clause)
+		query_string = query[:-3]
+		extract = arcpy.sa.ExtractByAttributes(glut_tif, query_string)
+
+	extract.save(out_raster)
