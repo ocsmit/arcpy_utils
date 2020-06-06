@@ -180,18 +180,23 @@ def elevChange_analysis(tif_path_list, out_dir):
 		out_dir :: str : Output directory where all rasters will be saved
 
     """
+	# Create output directory if it does not exist
 	if not os.path.exists(out_dir):
 		os.mkdir(out_dir)
 		print(out_dir, ' created.')
 	arcpy.env.overwriteOutput = True
+	# Iterate over all filepaths, open as rasters, and get individual
+	# elevation changes
 	spans = [(arcpy.Raster((tif_path_list[i + 1])) -
 			  arcpy.Raster(tif_path_list[i])) for i
 			  in range(len(tif_path_list) - 1)]
 	agg_names = []
+	# Save each individual change raster in out_dir with generated name
 	for i in range(len(spans)):
 		fileName = '%s/%s%d%s' % (out_dir, 'time_span', i, '.tif')
 		agg_names.append(fileName)
 		spans[i].save(fileName)
+	# Compute aggregate change across entire temporal dataset and save
 	agg = arcpy.sa.CellStatistics(agg_names, "MEAN")
 	fileName = '%s/%s' % (out_dir, 'AggElevCh.tif')
 	agg.save(fileName)
