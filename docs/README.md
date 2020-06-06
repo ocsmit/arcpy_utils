@@ -15,5 +15,6 @@
 * `shp_extent(shp)`
 * `query_GLUT(glut_tif, out_raster, value_list)`
 * `query_NLCD(nlcd_tif, out_raster, value_list)`
+* `elevChange_analysis(tif_path_list, out_dir)`
 
 _View arcpy_utils.py for more detail on each function_
