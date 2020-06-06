@@ -52,7 +52,7 @@ def yearly_weather_csv_to_shp(in_csv, year, columns, out_dir, csv_name,
 	in_csv :: str: File path of input .CSV file
 	year :: int: Year being selected
 	columns :: list: List of weather columns to use in final shapefile/.CSV
-	out_dir :: str: Directory where out puts will be saved
+	out_dir :: str: Directory where out_dir puts will be saved
 	csv_name :: str: Name of final output .CSV, does not need file extension
 	shp_name :: str: Name of final output shapefile, does not need
 					 file extension
@@ -155,3 +155,43 @@ def query_NLCD(nlcd_tif, out_raster, value_list):
 		extract = arcpy.sa.ExtractByAttributes(nlcd_tif, query_string)
 
 	extract.save(out_raster)
+
+
+def elevChange_analysis(tif_path_list, out_dir):
+	"""
+	This function creates and aggregates temporal elevation change accros the
+	input elevation tifs.
+	It operates in two parts:
+		1. Calculates differences between each individual elevation raster and
+		   its subsequent raster for each input raster.
+		   e.g. 1980 Elev - 1990 Elev, 1990 Elev - 2010 Elev, .... etc.
+		   Each is saved as time_spanX.tif in the out put directory
+
+		2. Creates an aggregated change raster across the entire temporal set.
+		   Saved as AggElevCh.tif in the output directory
+
+	Created as part of the ASABE 2020 research submission.
+	---
+	Parameters:
+		tif_path_list :: list : List of all input elevation rasters
+					** Rasters must be in correct temporal order
+					   e.g. [Oldest, .... , Newest]
+					   		[C:/tmp/1954Elev.tif, .... , C:/tmp/2000Elev.tif]
+		out_dir :: str : Output directory where all rasters will be saved
+
+    """
+	if not os.path.exists(out_dir):
+		os.mkdir(out_dir)
+		print(out_dir, ' created.')
+	arcpy.env.overwriteOutput = True
+	spans = [(arcpy.Raster((tif_path_list[i + 1])) -
+			  arcpy.Raster(tif_path_list[i])) for i
+			  in range(len(tif_path_list) - 1)]
+	agg_names = []
+	for i in range(len(spans)):
+		fileName = '%s/%s%d%s' % (out_dir, 'time_span', i, '.tif')
+		agg_names.append(fileName)
+		spans[i].save(fileName)
+	agg = arcpy.sa.CellStatistics(agg_names, "MEAN")
+	fileName = '%s/%s' % (out_dir, 'AggElevCh.tif')
+	agg.save(fileName)
