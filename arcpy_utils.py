@@ -176,7 +176,7 @@ def elevChange_analysis(tif_path_list, out_dir):
 		tif_path_list :: list : List of all input elevation rasters
 					** Rasters must be in correct temporal order
 					   e.g. [Oldest, .... , Newest]
-					   		[C:/tmp/1954Elev.tif, .... , C:/tmp/2000Elev.tif]
+					   	[C:/tmp/1954Elev.tif, .... , C:/tmp/2000Elev.tif]
 		out_dir :: str : Output directory where all rasters will be saved
 
     """
